@@ -20,13 +20,13 @@ from tensorflow.keras import layers
 
 # -------- 1. Carregar o dataset MNIST via tf.keras.datasets.mnist --------
 # -------- 3. Separar um conjunto de validação (ex: validation_split ou split manual) --------
-(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
-#print(f'x_train = {x_train.shape} | y_train = {y_train.shape}\nx_test  = {x_test.shape} | y_test  = {y_test.shape}')
+(x_train, y_train), (x_val, y_val) = keras.datasets.mnist.load_data()
+print(f'x_train = {x_train.shape} | y_train = {y_train.shape}\nx_val   = {x_val.shape} | y_val   = {y_val.shape}')
 
 # -------- 2. Normalizar as imagens para [0, 1] e ajustar o shape para (28, 28, 1) --------
 x_train = x_train.reshape((x_train.shape[0], 28, 28, 1)).astype("float32") / 255.0
-x_test = x_test.reshape((x_test.shape[0], 28, 28, 1)).astype("float32") / 255.0
-#print(f'x_train = {x_train.shape} | y_train = {y_train.shape}\nx_test  = {x_test.shape} | y_test  = {y_test.shape}')
+x_val = x_val.reshape((x_val.shape[0], 28, 28, 1)).astype("float32") / 255.0
+print(f'x_train = {x_train.shape} | y_train = {y_train.shape}\nx_val   = {x_val.shape} | y_val   = {y_val.shape}')
 
 # -------- 4. Construir uma CNN com 3-4 blocos Conv2D + BatchNormalization + MaxPooling2D, seguida de Dropout antes da camada de saída (10 classes, softmax) --------
 # Construção de um modelo sequencial
@@ -75,12 +75,12 @@ early_stopping = keras.callbacks.EarlyStopping(
 
 # Treinamento do modelo
 history = model.fit(
-    x_train,                   # Dados de treinamento
-    y_train,                   # Rótulos de treinamento
-    epochs=15,                 # Épocas
-    batch_size=64,             # "Lotes" de 64 imagens
-    validation_split=0.2,      # Pega 20% dos dados para validação no treino
-    callbacks=[early_stopping] # Adiciona o Early Stopping
+    x_train,                        # Dados de treinamento
+    y_train,                        # Rótulos de treinamento
+    epochs=15,                      # Épocas
+    batch_size=60,                  # "Lotes" de 60 imagens
+    validation_data=(x_val, y_val), # Utiliza os dados (x_val, y_val) para validação no treino
+    callbacks=[early_stopping]      # Adiciona o Early Stopping
 )
 
 # -------- 6. Exibir a acurácia de validação final no terminal --------
