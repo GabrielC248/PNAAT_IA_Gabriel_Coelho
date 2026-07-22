@@ -17,3 +17,7 @@ from tensorflow.keras import layers
 # ---------------------------------------------------------------------------
 
 # insira seu código aqui
+
+# -------- 1. Carregar o dataset MNIST via tf.keras.datasets.mnist --------
+(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
+print(f'x_train = {x_train.shape} | y_train = {y_train.shape}\nx_test  = {x_test.shape} | y_test  = {y_test.shape}')
