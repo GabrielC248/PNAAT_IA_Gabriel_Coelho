@@ -32,34 +32,34 @@ print(f'x_train = {x_train.shape} | y_train = {y_train.shape}\nx_val   = {x_val.
 # Construção de um modelo sequencial
 model = keras.Sequential([
     #Define o formato dos dados que a rede vai receber
-    keras.Input(shape=(28, 28, 1)),
+    keras.Input(shape = (28, 28, 1)),
 
     # Camada de convolução com 16 filtros, kernel 3x3, tratando as bordas com 0 e com a função de ativação ReLU
-    layers.Conv2D(16, kernel_size=(3, 3), padding="same", activation="relu"),
+    layers.Conv2D(16, kernel_size = (3, 3), padding = "same", activation = "relu"),
     layers.BatchNormalization(),
-    layers.MaxPooling2D(pool_size=(2, 2)),
+    layers.MaxPooling2D(pool_size = (2, 2)),
 
     # Camada de convolução com 32 filtros, kernel 3x3, tratando as bordas com 0 e com a função de ativação ReLU
-    layers.Conv2D(32, kernel_size=(3, 3), padding="same", activation="relu"),
+    layers.Conv2D(32, kernel_size = (3, 3), padding = "same", activation = "relu"),
     layers.BatchNormalization(),
-    layers.MaxPooling2D(pool_size=(2, 2)),
+    layers.MaxPooling2D(pool_size = (2, 2)),
 
     # Camada de convolução com 64 filtros, kernel 3x3, tratando as bordas com 0 e com a função de ativação ReLU
-    layers.Conv2D(64, kernel_size=(3, 3), padding="same", activation="relu"),
+    layers.Conv2D(64, kernel_size = (3, 3), padding = "same", activation = "relu"),
     layers.BatchNormalization(),
-    layers.MaxPooling2D(pool_size=(2, 2)),
+    layers.MaxPooling2D(pool_size = (2, 2)),
 
     layers.Flatten(),                      # "Achata" em um vetor
-    layers.Dense(64, activation="relu"),   # Camada neural com 64 neurônios
+    layers.Dense(64, activation = "relu"),   # Camada neural com 64 neurônios
     layers.Dropout(0.5),                   # Desliga aleatoriamente 50% dos neurônios
-    layers.Dense(10, activation="softmax") # Camada final de saída
+    layers.Dense(10, activation = "softmax") # Camada final de saída
 ])
 
 # Compilação do modelo
 model.compile(
-    optimizer="adam",                       # Otimizador Adam (Adaptive Moment Estimation)
-    loss="sparse_categorical_crossentropy", # Função de perda "categorical_crossentropy" para classes inteiras
-    metrics=["accuracy"]                    # Métrica de porcentagem de acertos
+    optimizer = "adam",                       # Otimizador Adam (Adaptive Moment Estimation)
+    loss = "sparse_categorical_crossentropy", # Função de perda "categorical_crossentropy" para classes inteiras
+    metrics = ["accuracy"]                    # Métrica de porcentagem de acertos
 )
 
 # Resumo do modelo feito
@@ -68,19 +68,19 @@ model.summary()
 # -------- 5. Treinar com EarlyStopping monitorando a perda de validação --------
 # Configuração do Early Stopping
 early_stopping = keras.callbacks.EarlyStopping(
-    monitor="val_loss",       # Erro no conjunto de validação
-    patience=3,               # Tolerância de 3 erros
-    restore_best_weights=True # Restaura os parâmetros da melhor época
+    monitor = "val_loss",       # Erro no conjunto de validação
+    patience = 3,               # Tolerância de 3 erros
+    restore_best_weights = True # Restaura os parâmetros da melhor época
 )
 
 # Treinamento do modelo
 history = model.fit(
-    x_train,                        # Dados de treinamento
-    y_train,                        # Rótulos de treinamento
-    epochs=15,                      # Épocas
-    batch_size=60,                  # "Lotes" de 60 imagens
-    validation_data=(x_val, y_val), # Utiliza os dados (x_val, y_val) para validação no treino
-    callbacks=[early_stopping]      # Adiciona o Early Stopping
+    x_train,                          # Dados de treinamento
+    y_train,                          # Rótulos de treinamento
+    epochs = 15,                      # Épocas
+    batch_size = 60,                  # "Lotes" de 60 imagens
+    validation_data = (x_val, y_val), # Utiliza os dados (x_val, y_val) para validação no treino
+    callbacks = [early_stopping]      # Adiciona o Early Stopping
 )
 
 # -------- 6. Exibir a acurácia de validação final no terminal --------
@@ -90,4 +90,4 @@ print(f"\nAcurácia final de validação: {val_accuracy:.4f}")
 # -------- 7. Salvar o modelo treinado como "model.h5" --------
 # Salvamento do modelo
 model_path = "model.h5"
-model.save(model_path)
+model.save(model_path, save_format = 'h5')
