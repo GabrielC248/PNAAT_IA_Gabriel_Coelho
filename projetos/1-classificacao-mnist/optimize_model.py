@@ -25,3 +25,13 @@ if not os.path.exists(model_path):
     )
 
 model = tf.keras.models.load_model(model_path)
+
+# -------- 2. Converter para TensorFlow Lite usando tf.lite.TFLiteConverter --------
+# -------- 3. Aplicar uma técnica de otimização (ex: Dynamic Range Quantization, via converter.optimizations = [tf.lite.Optimize.DEFAULT]) --------
+converter = tf.lite.TFLiteConverter.from_keras_model(model) # Configura o conversor do TensorFlow Lite
+converter.optimizations = [tf.lite.Optimize.DEFAULT]        # Aplica a Dynamic Range Quantization
+tflite_model = converter.convert()                          # Realiza a conversão
+
+# -------- 4. Salvar o resultado como "model.tflite" --------
+with open(tflite_path, "wb") as f:
+    f.write(tflite_model)
