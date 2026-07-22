@@ -19,6 +19,7 @@ from tensorflow.keras import layers
 # insira seu código aqui
 
 # -------- 1. Carregar o dataset MNIST via tf.keras.datasets.mnist --------
+# -------- 3. Separar um conjunto de validação (ex: validation_split ou split manual) --------
 (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
 print(f'x_train = {x_train.shape} | y_train = {y_train.shape}\nx_test  = {x_test.shape} | y_test  = {y_test.shape}')
 
@@ -26,3 +27,29 @@ print(f'x_train = {x_train.shape} | y_train = {y_train.shape}\nx_test  = {x_test
 x_train = x_train.reshape((x_train.shape[0], 28, 28, 1)).astype("float32") / 255.0
 x_test = x_test.reshape((x_test.shape[0], 28, 28, 1)).astype("float32") / 255.0
 print(f'x_train = {x_train.shape} | y_train = {y_train.shape}\nx_test  = {x_test.shape} | y_test  = {y_test.shape}')
+
+# -------- 4. Construir uma CNN com 3-4 blocos Conv2D + BatchNormalization + MaxPooling2D, seguida de Dropout antes da camada de saída (10 classes, softmax) --------
+model = keras.Sequential([
+    #Define o formato dos dados que a rede vai receber
+    keras.Input(shape=(28, 28, 1)),
+
+    # Camada de convolução com 16 filtros, kernel 3x3, tratando as bordas com 0 e com a função de ativação ReLU
+    layers.Conv2D(16, kernel_size=(3, 3), padding="same", activation="relu"),
+    layers.BatchNormalization(),
+    layers.MaxPooling2D(pool_size=(2, 2)),
+
+    # Camada de convolução com 32 filtros, kernel 3x3, tratando as bordas com 0 e com a função de ativação ReLU
+    layers.Conv2D(32, kernel_size=(3, 3), padding="same", activation="relu"),
+    layers.BatchNormalization(),
+    layers.MaxPooling2D(pool_size=(2, 2)),
+
+    # Camada de convolução com 64 filtros, kernel 3x3, tratando as bordas com 0 e com a função de ativação ReLU
+    layers.Conv2D(64, kernel_size=(3, 3), padding="same", activation="relu"),
+    layers.BatchNormalization(),
+    layers.MaxPooling2D(pool_size=(2, 2)),
+
+    layers.Flatten(),                      # "Achata" em um vetor
+    layers.Dense(64, activation="relu"),   # Camada neural com 64 neurônios
+    layers.Dropout(0.5),                   # Desliga aleatoriamente 50% dos neurônios
+    layers.Dense(10, activation="softmax") # Camada final de saída
+])
