@@ -1,3 +1,6 @@
+import os
+os.environ["TF_USE_LEGACY_KERAS"] = "1"  # Downgrade no keras para tentar dar match na validação do GitHub
+
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
@@ -31,11 +34,8 @@ print(f'x_train = {x_train.shape} | y_train = {y_train.shape}\nx_val   = {x_val.
 # -------- 4. Construir uma CNN com 3-4 blocos Conv2D + BatchNormalization + MaxPooling2D, seguida de Dropout antes da camada de saída (10 classes, softmax) --------
 # Construção de um modelo sequencial
 model = keras.Sequential([
-    #Define o formato dos dados que a rede vai receber
-    keras.Input(shape = (28, 28, 1)),
-
     # Camada de convolução com 16 filtros, kernel 3x3, tratando as bordas com 0 e com a função de ativação ReLU
-    layers.Conv2D(16, kernel_size = (3, 3), padding = "same", activation = "relu"),
+    layers.Conv2D(16, kernel_size = (3, 3), padding = "same", activation = "relu", input_shape = (28, 28, 1)),
     layers.BatchNormalization(),
     layers.MaxPooling2D(pool_size = (2, 2)),
 
@@ -49,9 +49,9 @@ model = keras.Sequential([
     layers.BatchNormalization(),
     layers.MaxPooling2D(pool_size = (2, 2)),
 
-    layers.Flatten(),                      # "Achata" em um vetor
+    layers.Flatten(),                        # "Achata" em um vetor
     layers.Dense(64, activation = "relu"),   # Camada neural com 64 neurônios
-    layers.Dropout(0.5),                   # Desliga aleatoriamente 50% dos neurônios
+    layers.Dropout(0.5),                     # Desliga aleatoriamente 50% dos neurônios
     layers.Dense(10, activation = "softmax") # Camada final de saída
 ])
 
