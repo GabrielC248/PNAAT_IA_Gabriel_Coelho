@@ -46,7 +46,7 @@ model = keras.Sequential([
     layers.BatchNormalization(),
     layers.MaxPooling2D(pool_size = (2, 2)),
 
-    layers.Flatten(),                        # "Achata" em um vetor
+    layers.GlobalAveragePooling2D(),         # Calcula a média de todos os pixels "achatando" em um vetor
     layers.Dense(64, activation = "relu"),   # Camada neural com 64 neurônios
     layers.Dropout(0.5),                     # Desliga aleatoriamente 50% dos neurônios
     layers.Dense(10, activation = "softmax") # Camada final de saída
@@ -75,7 +75,7 @@ history = model.fit(
     x_train,                          # Dados de treinamento
     y_train,                          # Rótulos de treinamento
     epochs = 15,                      # Épocas
-    batch_size = 60,                  # "Lotes" de 60 imagens
+    batch_size = 30,                  # "Lotes" de 30 imagens
     validation_data = (x_val, y_val), # Utiliza os dados (x_val, y_val) para validação no treino
     callbacks = [early_stopping]      # Adiciona o Early Stopping
 )
